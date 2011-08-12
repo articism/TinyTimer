@@ -39,6 +39,8 @@ module TinyTimer
     end
   end
 
+end
+
   # User Interface (global convenience methods)
   def timer(desc=nil, &block)
     TinyTimer::Timer.run_timer(desc, &block)
@@ -49,5 +51,4 @@ module TinyTimer
     # TODO: raise exeption if timer is nil
     timer.step(desc,&block) if timer
   end
-  
-end
+
