@@ -29,13 +29,15 @@ module TinyTimer
 
     def initialize
       @start_time = Time.now
+      @step_count = 0
     end
 
     def step(desc='')
-      puts "------ start #{desc} ..."
+      @step_count += 1
+      puts "      #{@step_count}. #{desc} ... "
       start = Time.now
       yield
-      puts "------ finish #{desc} in #{Time.now - start} seconds"
+      puts "      -- finished in #{Time.now - start} seconds"
     end
   end
 

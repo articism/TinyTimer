@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "tiny_timer/version"
 
 Gem::Specification.new do |s|
-  s.name        = "tiny_timer"
+  s.name        = "tinytimer"
   s.version     = TinyTimer::VERSION
   s.authors     = ["Tao Zhang"]
   s.email       = ["birdbluebloc@gmail.com"]
