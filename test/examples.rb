@@ -3,7 +3,7 @@ $:.push File.expand_path("../../lib", __FILE__)
 require 'tiny_timer'
 
 def nested_1
-  timer "yielding some block" do
+  timer "(nested_1) yielding some block" do
     step 'do something first' do
       10000.times do |i|
         i + 2
@@ -11,6 +11,9 @@ def nested_1
     end
     yield
     step 'do something afterwards' do
+      step 'a nested step will be neglected, although the code in the block will still run' do # do not do this!
+        puts 'another screwing output'
+      end
       10000.times do |i|
         i + 2
       end

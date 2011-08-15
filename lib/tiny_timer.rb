@@ -31,26 +31,36 @@ module TinyTimer
       end
     end
 
-    attr_reader :start_time
+    attr_reader :start_time, :real_running_time
 
     def initialize
       @start_time = Time.now
       @step_count = 0
+      @real_running_time = 0 # sum of the running time of all steps
     end
 
+    # if no block given, should do nothing
     def step(desc='')
       if block_given?
-        @step_count += 1
-        puts "#{@@leading}#{STEP_CHARS}#{@step_count}. #{desc} ... "
-        start = Time.now
-        yield
-        puts "#{@@leading}#{STEP_CHARS}-- finished in #{Time.now - start} seconds"
+        if @block_flag
+          yield
+        else
+          @step_count += 1
+          puts "#{@@leading}#{STEP_CHARS}#{@step_count}. #{desc} ... "
+          @block_flag = true
+          start = Time.now
+          yield
+          running_time = Time.now - start
+          @block_flag = false
+          @real_running_time += running_time
+          puts "#{@@leading}#{STEP_CHARS}-- finished in #{running_time} seconds"
+        end
       end
     end
     
     # use this method if you only want to print out something, do not create an empty step or timer
     def comment(desc='')
-      puts "#{@@leading}#{STEP_CHARS}#{desc}" if desc.length > 0
+      puts "#{@@leading}#{STEP_CHARS}[ #{desc} ]" if desc.length > 0
     end
   end
 
