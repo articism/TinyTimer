@@ -1,18 +1,24 @@
 require "tiny_timer/version"
 
 module TinyTimer
+  TIMER_CHARS = '*** '
+  LEADING_CHARS = TIMER_CHARS
+  STEP_CHARS = TIMER_CHARS + '  '
 
   class Timer
     @@timers = []
+    @@leading = ''
 
     class << self
       def run_timer(desc=nil, &block)
         # desc ||= Rake.application.last_description
         new_timer = self.new
         @@timers.push(new_timer)
-        puts "*** Started: #{desc}" #TODO: ANSI color for Started
+        @@leading += LEADING_CHARS if self.count > 1 # 4 whitespaces
+        puts "#{@@leading}#{TIMER_CHARS}Started: #{desc}" #TODO: ANSI color for Started
         yield
-        puts "*** Finished. Total running time: #{Time.now - new_timer.start_time} seconds"
+        puts "#{@@leading}#{TIMER_CHARS}Finished. Total running time: #{Time.now - new_timer.start_time} seconds"
+        @@leading.sub!(/.{#{LEADING_CHARS.size}}$/,'') if self.count > 1
         @@timers.pop
       end
 
@@ -33,11 +39,18 @@ module TinyTimer
     end
 
     def step(desc='')
-      @step_count += 1
-      puts "      #{@step_count}. #{desc} ... "
-      start = Time.now
-      yield
-      puts "      -- finished in #{Time.now - start} seconds"
+      if block_given?
+        @step_count += 1
+        puts "#{@@leading}#{STEP_CHARS}#{@step_count}. #{desc} ... "
+        start = Time.now
+        yield
+        puts "#{@@leading}#{STEP_CHARS}-- finished in #{Time.now - start} seconds"
+      end
+    end
+    
+    # use this method if you only want to print out something, do not create an empty step or timer
+    def comment(desc='')
+      puts "#{@@leading}#{STEP_CHARS}#{desc}" if desc.length > 0
     end
   end
 
@@ -52,5 +65,11 @@ end
     timer = TinyTimer::Timer.current_timer
     # TODO: raise exeption if timer is nil
     timer.step(desc,&block) if timer
+  end
+  
+  def comment(desc='')
+    timer = TinyTimer::Timer.current_timer
+    # TODO: raise exeption if timer is nil
+    timer.comment(desc) if timer
   end
 
