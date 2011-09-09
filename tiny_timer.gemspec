@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = TinyTimer::VERSION
   s.authors     = ["Tao Zhang"]
   s.email       = ["birdbluebloc@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "http://github.com/articism/TinyTimer"
   s.summary     = %q{ a very simple gem to print elapsed time for pieces of code or rake tasks }
   s.description = %q{ with handy global methods, print out the running time as your codes run }
   s.license     = 'MIT'

@@ -20,5 +20,11 @@ module TinyTimer
       timer.comment(desc) if timer
     end
     
+    # overwrite **puts**, prepending the leading characters 
+    def puts(*arg)
+      print TinyTimer::Timer.leading
+      super(*arg)
+    end
+    
   end
 end
